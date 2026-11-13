@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 760" width="1160" height="760" role="img" aria-labelledby="title desc">
+  <title id="title">阅记（Yueji）系统架构总览</title>
+  <desc id="desc">微信小程序与 H5 经 Nginx 访问 Go 单体服务；服务依赖 MySQL 与对象存储 COS，并调用微信登录、短信、通义千问、腾讯云 OCR 与 Node.js 渲染服务；OCR 图片由前端预签名直传 COS。</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#00a82d"/>
+    </marker>
+    <style>
+      .title { font-family: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-size: 22px; font-weight: 600; fill: #111827; }
+      .group-label { font-family: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-size: 14px; font-weight: 600; fill: #6b7280; letter-spacing: 1px; }
+      .box-title { font-family: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-size: 15px; font-weight: 600; fill: #1f2937; }
+      .box-sub { font-family: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-size: 12px; fill: #6b7280; }
+      .client-title { font-family: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-size: 16px; font-weight: 600; fill: #065f46; }
+      .edge { font-family: -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-size: 12px; fill: #6b7280; }
+      .layer { fill: #f9fafb; stroke: #d1d5db; stroke-width: 1; }
+      .group { fill: #f3faf5; stroke: #a7d8b4; stroke-width: 1; }
+      .box { fill: #ffffff; stroke: #00a82d; stroke-width: 1.2; }
+      .box-alt { fill: #ffffff; stroke: #9ca3af; stroke-width: 1.2; }
+      .line { stroke: #6b7280; stroke-width: 1.4; fill: none; marker-end: url(#arrow); }
+      .line-green { stroke: #00a82d; stroke-width: 1.4; fill: none; marker-end: url(#arrow-green); stroke-dasharray: 5 4; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1160" height="760" fill="#ffffff"/>
+  <text class="title" x="40" y="44">阅记（Yueji）· 系统架构总览（MVP，单人维护）</text>
+  <text class="box-sub" x="40" y="66">微信小程序 + Go 单体 + MySQL / 对象存储 COS + 外部 AI 与登录能力</text>
+
+  <!-- client layer -->
+  <rect class="layer" x="40" y="92" width="1080" height="104" rx="10"/>
+  <text class="group-label" x="56" y="116">客户端</text>
+  <rect class="box" x="120" y="126" width="360" height="56" rx="8"/>
+  <text class="client-title" x="140" y="150">微信小程序（正式渠道）</text>
+  <text class="box-sub" x="140" y="170">uni-app 3 · Vue 3 · TypeScript · Pinia · uView Plus</text>
+  <rect class="box-alt" x="560" y="126" width="300" height="56" rx="8"/>
+  <text class="box-title" x="580" y="150">H5（仅用于测试与调试）</text>
+  <text class="box-sub" x="580" y="170">Playwright E2E 宿主</text>
+
+  <!-- nginx -->
+  <rect class="box-alt" x="180" y="248" width="240" height="52" rx="8"/>
+  <text class="box-title" x="204" y="272">Nginx</text>
+  <text class="box-sub" x="204" y="290">HTTPS · 反向代理</text>
+  <path class="line" d="M 300 196 L 300 226 L 300 246" fill="none"/>
+  <text class="edge" x="312" y="224">HTTPS</text>
+
+  <!-- go monolith -->
+  <rect class="layer" x="40" y="336" width="1080" height="150" rx="10"/>
+  <text class="group-label" x="620" y="360">Go 单体服务（Gin · Clean Architecture 简化分层）</text>
+  <rect class="box" x="80" y="378" width="200" height="76" rx="8"/>
+  <text class="box-title" x="100" y="404">接口层</text>
+  <text class="box-sub" x="100" y="424">Gin 路由 · JWT 中间件</text>
+  <text class="box-sub" x="100" y="440">统一响应与错误码</text>
+  <rect class="box" x="320" y="378" width="200" height="76" rx="8"/>
+  <text class="box-title" x="340" y="404">应用层（UseCase）</text>
+  <text class="box-sub" x="340" y="424">auth · book · note</text>
+  <text class="box-sub" x="340" y="440">mindmap · storage · feedback</text>
+  <rect class="box" x="560" y="378" width="200" height="76" rx="8"/>
+  <text class="box-title" x="580" y="404">领域层</text>
+  <text class="box-sub" x="580" y="424">实体 · 仓储接口</text>
+  <text class="box-sub" x="580" y="440">领域服务接口</text>
+  <rect class="box" x="800" y="378" width="260" height="76" rx="8"/>
+  <text class="box-title" x="820" y="404">基础设施层</text>
+  <text class="box-sub" x="820" y="424">MySQL / COS / LLM / OCR</text>
+  <text class="box-sub" x="820" y="440">SMS / PDF / 渲染服务客户端</text>
+  <line class="line" x1="280" y1="416" x2="318" y2="416"/>
+  <line class="line" x1="520" y1="416" x2="558" y2="416"/>
+  <line class="line" x1="760" y1="416" x2="798" y2="416"/>
+  <path class="line" d="M 300 300 L 300 316 L 180 316 L 180 374" fill="none"/>
+
+  <!-- data group -->
+  <rect class="group" x="60" y="522" width="480" height="200" rx="10"/>
+  <text class="group-label" x="76" y="546">数据与存储</text>
+  <rect class="box-alt" x="84" y="562" width="200" height="68" rx="8"/>
+  <text class="box-title" x="104" y="586">MySQL 8</text>
+  <text class="box-sub" x="104" y="604">users · books · chapters</text>
+  <text class="box-sub" x="104" y="620">notes · mindmaps · exports</text>
+  <rect class="box-alt" x="304" y="562" width="212" height="68" rx="8"/>
+  <text class="box-title" x="324" y="586">对象存储 COS</text>
+  <text class="box-sub" x="324" y="604">书封 · OCR 临时图</text>
+  <text class="box-sub" x="324" y="620">导图 · 导出文件</text>
+  <rect class="box-alt" x="84" y="646" width="432" height="52" rx="8"/>
+  <text class="box-sub" x="104" y="670">笔记软删除（deleted_at）· 手机号 AES 加密存储 + HMAC 查询索引</text>
+  <text class="box-sub" x="104" y="688">书籍删除：有笔记 / 导图时禁止物理删除</text>
+  <path class="line" d="M 200 486 L 200 520" fill="none"/>
+  <text class="edge" x="210" y="508">SQL</text>
+
+  <!-- external group -->
+  <rect class="group" x="560" y="522" width="560" height="200" rx="10"/>
+  <text class="group-label" x="576" y="546">外部能力</text>
+  <rect class="box-alt" x="584" y="562" width="160" height="56" rx="8"/>
+  <text class="box-title" x="604" y="586">微信登录</text>
+  <text class="box-sub" x="604" y="604">code2Session</text>
+  <rect class="box-alt" x="764" y="562" width="150" height="56" rx="8"/>
+  <text class="box-title" x="784" y="586">短信服务</text>
+  <text class="box-sub" x="784" y="604">验证码 · 限流</text>
+  <rect class="box-alt" x="934" y="562" width="166" height="56" rx="8"/>
+  <text class="box-title" x="954" y="586">通义千问</text>
+  <text class="box-sub" x="954" y="604">整理 · 导图 · 多模态</text>
+  <rect class="box-alt" x="584" y="646" width="160" height="52" rx="8"/>
+  <text class="box-title" x="604" y="670">腾讯云 OCR</text>
+  <text class="box-sub" x="604" y="688">备用识别链路</text>
+  <rect class="box-alt" x="764" y="646" width="150" height="52" rx="8"/>
+  <text class="box-title" x="784" y="670">Node.js 渲染</text>
+  <text class="box-sub" x="784" y="688">Markdown → PNG</text>
+  <rect class="box-alt" x="934" y="646" width="166" height="52" rx="8"/>
+  <text class="box-title" x="954" y="670">微信小程序平台</text>
+  <text class="box-sub" x="954" y="688">登录 / 手机号授权</text>
+  <path class="line" d="M 900 486 L 900 520" fill="none"/>
+  <text class="edge" x="910" y="508">API 调用</text>
+
+  <!-- presigned upload dashed -->
+  <path class="line-green" d="M 480 154 L 540 154 L 540 500 L 380 500 L 380 560" fill="none"/>
+  <text class="edge" x="430" y="492" fill="#00a82d">图片预签名直传</text>
+
+  <!-- legend -->
+  <text class="box-sub" x="40" y="748">图例：实线 = 请求 / 依赖调用；绿色虚线 = 前端直传对象存储（后端不中转大文件）。本图不含任何部署地址、账号与环境信息。</text>
+</svg>
